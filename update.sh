@@ -1,19 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Place this script in the same directory as:
+# Publication des bases sur GitHub Releases (dépôt public kitsune-data).
+#
+# Placer ce script dans le dépôt local kitsune-data, à côté de :
 # - manifest.json
-# - either the .db files, the .zip archives, or both
+# - les fichiers .db, les archives .zip, ou les deux
 #
-# If a .db file is present, it is the source of truth and the matching ZIP is
-# rebuilt when needed. If only the ZIP is present, the manifest is rebuilt from
-# that ZIP without requiring the .db file.
+# Si un .db est présent, il fait foi et le ZIP correspondant est reconstruit
+# quand c'est nécessaire. Si seul le ZIP est présent, le manifeste est
+# reconstruit depuis ce ZIP sans exiger le .db.
 #
-# It creates/updates ZIP archives when possible and rewrites manifest.json atomically.
-# A database version is incremented only when the .db content changed.
-# Useful options:
-#   FORCE=1 ./update.sh     rebuild all ZIP files
-#   DRY_RUN=1 ./update.sh   show what would be done without writing manifest.json
+# Le champ "archive" du manifeste est l'URL ABSOLUE de l'asset GitHub
+# Releases. Les ZIP nouveaux ou modifiés sont téléversés (CLI gh) dans la
+# release $TAG, créée si besoin ; les bases inchangées gardent l'URL de leur
+# release d'origine. La version d'une base n'est incrémentée que si le
+# contenu du .db a changé. manifest.json est réécrit atomiquement — le
+# committer/pousser ensuite (rappelé en fin de script).
+#
+# Options :
+#   FORCE=1 ./update.sh              reconstruit et téléverse tous les ZIP
+#   DRY_RUN=1 ./update.sh            simule sans écrire ni téléverser
+#   TAG=v2026.07.21 ./update.sh      tag de release (défaut : v<date UTC>)
+#   REPO=login/kitsune-data ./update.sh   dépôt (défaut : détecté par gh)
 
 MANIFEST="manifest.json"
 TMP_MANIFEST="${MANIFEST}.tmp"
@@ -28,7 +37,9 @@ DATABASES=(
   "kanjivg|Tracés KanjiVG|kanjivg.db|kanjivg.zip|true"
   "idioms|Expressions et kotowaza|idioms.db|idioms.zip|true"
   "exercises|Exercices|exercises.db|exercises.zip|true"
-  "lessons|Leçons JLPT|lessons.db|lessons.zip|false"
+  # Base Leçons désactivée dans l'app (retirée des DEFINITIONS) ; réactiver
+  # cette ligne — avec lessons.db ou lessons.zip présent — pour la republier.
+  # "lessons|Leçons JLPT|lessons.db|lessons.zip|false"
 )
 
 require_command() {
@@ -200,7 +211,7 @@ append_manifest_entry() {
   local id="$2"
   local label="$3"
   local filename="$4"
-  local archive="$5"
+  local archive_url="$5"
   local version="$6"
   local archive_sha="$7"
   local db_sha="$8"
@@ -213,7 +224,7 @@ append_manifest_entry() {
     printf '      "id": "%s",\n' "$(json_escape "$id")"
     printf '      "label": "%s",\n' "$(json_escape "$label")"
     printf '      "filename": "%s",\n' "$(json_escape "$filename")"
-    printf '      "archive": "%s",\n' "$(json_escape "$archive")"
+    printf '      "archive": "%s",\n' "$(json_escape "$archive_url")"
     printf '      "version": %s,\n' "$version"
     printf '      "sha256": "%s",\n' "$archive_sha"
     printf '      "dbSha256": "%s",\n' "$db_sha"
@@ -231,12 +242,46 @@ write_manifest_footer() {
   } >> "$TMP_MANIFEST"
 }
 
+# --- Configuration GitHub Releases ------------------------------------------
+
+# Sous Git Bash, un terminal ouvert avant l'installation de GitHub CLI ne l'a
+# pas dans son PATH : on ajoute les emplacements d'installation habituels.
+if ! command -v gh >/dev/null 2>&1; then
+  for gh_dir in "/c/Program Files/GitHub CLI" "$HOME/AppData/Local/Programs/GitHub CLI"; do
+    if [[ -x "$gh_dir/gh.exe" || -x "$gh_dir/gh" ]]; then
+      PATH="$PATH:$gh_dir"
+      break
+    fi
+  done
+fi
+
+TAG="${TAG:-v$(date -u +%Y.%m.%d)}"
+
+if [[ -z "${REPO:-}" ]]; then
+  require_command gh
+  REPO="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || true)"
+fi
+if [[ -z "$REPO" ]]; then
+  echo "Erreur: dépôt GitHub introuvable. Lancer depuis le dépôt kitsune-data ou passer REPO=login/kitsune-data." >&2
+  exit 1
+fi
+
+release_url() {
+  printf 'https://github.com/%s/releases/download/%s/%s' "$REPO" "$TAG" "$1"
+}
+
+echo "Dépôt: $REPO — release: $TAG"
+echo
+
+# ----------------------------------------------------------------------------
+
 NOW="$(utc_now)"
 write_manifest_header "$NOW"
 
 total=${#DATABASES[@]}
 index=0
 changes=0
+UPLOAD_FILES=()
 
 for spec in "${DATABASES[@]}"; do
   index=$((index + 1))
@@ -255,6 +300,7 @@ for spec in "${DATABASES[@]}"; do
   previous_version="$(previous_value "$id" "version")"
   previous_archive_sha="$(previous_value "$id" "sha256")"
   previous_db_sha="$(previous_value "$id" "dbSha256")"
+  previous_archive_url="$(previous_value "$id" "archive")"
 
   if [[ -f "$filename" ]]; then
     db_sha="$(sha256_file "$filename")"
@@ -264,8 +310,10 @@ for spec in "${DATABASES[@]}"; do
 
   archive_for_manifest="$archive"
   dry_archive=""
+  rebuilt=0
   if [[ -f "$filename" ]] && archive_needs_rebuild "$filename" "$archive" "$db_sha" "$previous_db_sha"; then
     echo "ZIP  $archive <- $filename"
+    rebuilt=1
     if [[ "${DRY_RUN:-0}" == "1" ]]; then
       dry_archive="$(dry_run_archive "$filename" "$archive")"
       archive_for_manifest="$dry_archive"
@@ -299,6 +347,24 @@ for spec in "${DATABASES[@]}"; do
     echo "OK   $id version $version"
   fi
 
+  # Téléversement requis si le ZIP a changé, si la version bouge, ou si le
+  # manifeste précédent ne portait pas encore d'URL GitHub (migration).
+  needs_upload=0
+  if [[ "${FORCE:-0}" == "1" || "$rebuilt" == "1" ]]; then
+    needs_upload=1
+  elif [[ "$previous_archive_url" != http* ]]; then
+    needs_upload=1
+  elif [[ "$version" != "$previous_version" ]]; then
+    needs_upload=1
+  fi
+
+  if [[ "$needs_upload" == "1" ]]; then
+    archive_url="$(release_url "$archive")"
+    UPLOAD_FILES+=("$archive")
+  else
+    archive_url="$previous_archive_url"
+  fi
+
   comma=","
   if [[ "$index" -eq "$total" ]]; then
     comma=""
@@ -309,7 +375,7 @@ for spec in "${DATABASES[@]}"; do
     "$id" \
     "$label" \
     "$filename" \
-    "$archive" \
+    "$archive_url" \
     "$version" \
     "$archive_sha" \
     "$db_sha" \
@@ -329,8 +395,25 @@ if [[ "${DRY_RUN:-0}" == "1" ]]; then
   cat "$TMP_MANIFEST"
   rm -f "$TMP_MANIFEST"
   echo
+  if [[ ${#UPLOAD_FILES[@]} -gt 0 ]]; then
+    echo "DRY_RUN=1: seraient téléversés dans $REPO ($TAG): ${UPLOAD_FILES[*]}"
+  fi
   echo "DRY_RUN=1: manifest.json n'a pas ete remplace."
   exit 0
+fi
+
+# Téléverser AVANT de remplacer le manifeste : si l'upload échoue, l'ancien
+# manifeste (et ses URLs valides) reste en place.
+if [[ ${#UPLOAD_FILES[@]} -gt 0 ]]; then
+  require_command gh
+  if ! gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
+    echo "Création de la release $TAG..."
+    gh release create "$TAG" --repo "$REPO" --title "Bases $TAG" --notes "Publication du $NOW"
+  fi
+  for archive_file in "${UPLOAD_FILES[@]}"; do
+    echo "PUSH $archive_file -> $REPO ($TAG)"
+    gh release upload "$TAG" "$archive_file" --repo "$REPO" --clobber
+  done
 fi
 
 if [[ -f "$MANIFEST" ]]; then
@@ -344,3 +427,6 @@ echo "manifest.json mis a jour ($changes changement(s) de version)."
 if [[ -f "$BACKUP_MANIFEST" ]]; then
   echo "Ancienne version sauvegardee dans $BACKUP_MANIFEST."
 fi
+echo
+echo "Reste a publier le manifeste :"
+echo "  git add manifest.json && git commit -m \"Bases $TAG\" && git push"

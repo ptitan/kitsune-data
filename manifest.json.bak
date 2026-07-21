@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "updatedAt": "2026-07-20T20:59:35Z",
+  "compression": "zip",
+  "databases": [
+    {
+      "id": "kitsune",
+      "label": "Dictionnaire principal",
+      "filename": "kitsune",
+      "archive": "kitsune.zip",
+      "version": 13,
+      "sha256": "c9bfc21c21b435cbafe1ebb521b919b540a871943138ed15c2bfe21d9203f6be",
+      "dbSha256": "831e0101ee35f9ee543a63fbf1a7d14e9f4bb3a4ee8d9f50865f7aba94d81b2d",
+      "archiveSize": 38742687,
+      "uncompressedSize": 86736896,
+      "required": true
+    },
+    {
+      "id": "grammar_jlpt",
+      "label": "Grammaire JLPT",
+      "filename": "grammar_jlpt.db",
+      "archive": "grammar_jlpt.zip",
+      "version": 5,
+      "sha256": "18c145614320d411fe7c5da171fe963f13463040126d35188a52ad5cf7ef1e38",
+      "dbSha256": "2cd53253bd44637b628e2e4fef5f41d0716cda72b75184c2379b9225825d67e2",
+      "archiveSize": 1244470,
+      "uncompressedSize": 3735552,
+      "required": true
+    },
+    {
+      "id": "kanjivg",
+      "label": "Tracés KanjiVG",
+      "filename": "kanjivg.db",
+      "archive": "kanjivg.zip",
+      "version": 1,
+      "sha256": "12609216d69ad0e38c821c2771f59f92b8bf0c1925b302d71d33de5d586e6a9a",
+      "dbSha256": "a310f68fe33dfad26c61bf49ed7f0ab7cf674e6025b45e62fc0d1c8f4b964bc9",
+      "archiveSize": 2494564,
+      "uncompressedSize": 6795264,
+      "required": true
+    },
+    {
+      "id": "idioms",
+      "label": "Expressions et kotowaza",
+      "filename": "idioms.db",
+      "archive": "idioms.zip",
+      "version": 8,
+      "sha256": "537eb6cca03dea1d2e7ab04b0bd64ff88bf711dc93836fe2c8bde3009131228a",
+      "dbSha256": "34e0fd2ad8b58620dd6422495bb2d8fa1ad07fe5505e4c2a37e81f106a72c714",
+      "archiveSize": 1544175,
+      "uncompressedSize": 4395008,
+      "required": true
+    },
+    {
+      "id": "exercises",
+      "label": "Exercices",
+      "filename": "exercises.db",
+      "archive": "exercises.zip",
+      "version": 3,
+      "sha256": "f1fc3e856c5903c9fd8c779f13c6f0e4124a98d74ab9c28ebc963a937eb1b29b",
+      "dbSha256": "4cf2fd20231277488e74438f58c8119c6351f7eea1c3fadd562798762d5808d7",
+      "archiveSize": 80919,
+      "uncompressedSize": 299008,
+      "required": true
+    },
+    {
+      "id": "lessons",
+      "label": "Leçons JLPT",
+      "filename": "lessons.db",
+      "archive": "lessons.zip",
+      "version": 3,
+      "sha256": "78ad74e6e5251d7f92585fe8a3f1a0d47eccecc224276f7ff305be621d738c59",
+      "dbSha256": "7073d3222f692c2666bdb33fab9fc89129fbb088860837d3a7004a1bf35c2d36",
+      "archiveSize": 562565,
+      "uncompressedSize": 1970176,
+      "required": false
+    }
+  ]
+}
