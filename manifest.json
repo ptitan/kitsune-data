@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updatedAt": "2026-07-24T10:32:14Z",
+  "updatedAt": "2026-07-24T21:49:31Z",
   "compression": "zip",
   "databases": [
     {
@@ -8,10 +8,10 @@
       "label": "Dictionnaire principal",
       "filename": "kitsune",
       "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.24/kitsune.zip",
-      "version": 15,
-      "sha256": "37fd04c65cf4398ea6314aa51a6d57c90fc588dd6d1f89b45ce9d991952f8625",
-      "dbSha256": "7803a9a44289d6bc7ee50bbd1530b3958d83565df365c1b539e480f0ce341656",
-      "archiveSize": 39414679,
+      "version": 16,
+      "sha256": "9a65d5cdb34ca231854603ad785bbe5ad8106e3aeb3bd885492ebe8a268763bd",
+      "dbSha256": "a3b9a8145719b1eb47dd6b9901e4f174d10c2401447df2c8fa3dccfe1bb6a749",
+      "archiveSize": 38882255,
       "uncompressedSize": 88014848,
       "required": true
     },
