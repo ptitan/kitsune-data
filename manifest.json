@@ -1,18 +1,18 @@
 {
   "schema": 1,
-  "updatedAt": "2026-07-21T08:55:58Z",
+  "updatedAt": "2026-07-24T10:32:14Z",
   "compression": "zip",
   "databases": [
     {
       "id": "kitsune",
       "label": "Dictionnaire principal",
       "filename": "kitsune",
-      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.21/kitsune.zip",
-      "version": 14,
-      "sha256": "c1d7fe67288a92068fa28cea7e878936f7fe58f3fc36d5dd3a459f88430402a0",
-      "dbSha256": "b81af7452fd3f4dec77a58dbe3917529fb0691cf9329740963082633ae385e70",
-      "archiveSize": 51138860,
-      "uncompressedSize": 118902784,
+      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.24/kitsune.zip",
+      "version": 15,
+      "sha256": "37fd04c65cf4398ea6314aa51a6d57c90fc588dd6d1f89b45ce9d991952f8625",
+      "dbSha256": "7803a9a44289d6bc7ee50bbd1530b3958d83565df365c1b539e480f0ce341656",
+      "archiveSize": 39414679,
+      "uncompressedSize": 88014848,
       "required": true
     },
     {
@@ -43,12 +43,12 @@
       "id": "idioms",
       "label": "Expressions et kotowaza",
       "filename": "idioms.db",
-      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.21/idioms.zip",
-      "version": 9,
-      "sha256": "060cfe23fd028a3976823a71c031603b9a5f5b9ff368b8d251d2a9995ad5f36c",
-      "dbSha256": "a004b58143f1e9af135995bb0367db615361d58c855d1ce64b26b63374debb13",
-      "archiveSize": 1931951,
-      "uncompressedSize": 5459968,
+      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.24/idioms.zip",
+      "version": 10,
+      "sha256": "9336c8933d8dd000cbe6a47a7b752b68b9713eddceb940d869d9348177845eab",
+      "dbSha256": "3c847f380328fff57dfef39f71b8e90134e612f527260138375c5046c4b21008",
+      "archiveSize": 1624557,
+      "uncompressedSize": 4632576,
       "required": true
     },
     {
