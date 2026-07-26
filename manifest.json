@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "updatedAt": "2026-07-26T08:24:29Z",
+  "updatedAt": "2026-07-26T08:48:29Z",
   "compression": "zip",
   "databases": [
     {
@@ -44,11 +44,11 @@
       "label": "Base de grammaire",
       "filename": "grammar.db",
       "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.26/grammar.zip",
-      "version": 2,
-      "sha256": "762290ba8c09c932b5a5d2a4c75bbf060d5b0605854cdc87c7662b7fabe60bd2",
-      "dbSha256": "7576637f8b6ae817533eedfade63ad1f060b7e620c9e4fb9b980ca1a05f213d0",
-      "archiveSize": 1772604,
-      "uncompressedSize": 5726208,
+      "version": 3,
+      "sha256": "68bb06fff00a3d24bc4a3abe8adc2acdd5fe7c29292ae2c8ad0c004611b67b18",
+      "dbSha256": "2fd2b20df62f728312d501b461a576a67a5bdf0c5650ebc34751dbb02ca6041c",
+      "archiveSize": 1772478,
+      "uncompressedSize": 5730304,
       "required": true
     },
     {
