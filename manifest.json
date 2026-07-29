@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "updatedAt": "2026-07-27T14:41:45Z",
+  "updatedAt": "2026-07-29T07:52:58Z",
   "compression": "zip",
   "databases": [
     {
@@ -31,12 +31,12 @@
       "id": "idioms",
       "label": "Base d'expressions",
       "filename": "idioms.db",
-      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.27/idioms.zip",
-      "version": 14,
-      "sha256": "ba2e18c78b61a390e4c531a915f9f3513007332ccd3a8de15b00d8398a0464a3",
-      "dbSha256": "6e3371bd0639c2c555589c6227161faa4c163e9c590b44e25acab5e5ded9fef1",
-      "archiveSize": 2163541,
-      "uncompressedSize": 6225920,
+      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.29/idioms.zip",
+      "version": 15,
+      "sha256": "b6d71b99f836779a624a0a97d5a72b72477be5f9d5f1025fd003e20e69ae3b89",
+      "dbSha256": "952a3c3bb50168afe1b23689e0d1cb09683d2ce9c3fa34b1542eb9994102b361",
+      "archiveSize": 2534235,
+      "uncompressedSize": 7073792,
       "required": true
     },
     {
