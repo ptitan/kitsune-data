@@ -1,18 +1,18 @@
 {
   "schema": 2,
-  "updatedAt": "2026-07-29T07:52:58Z",
+  "updatedAt": "2026-08-02T22:23:55Z",
   "compression": "zip",
   "databases": [
     {
       "id": "vocabulaire",
       "label": "Base de vocabulaire",
       "filename": "vocabulaire.db",
-      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.27/vocabulaire.zip",
-      "version": 4,
-      "sha256": "26c76ee76be329d51635fe8ee00dce85e0ee83a2802ea6b9a819998f8ee73626",
-      "dbSha256": "3055281959c47c0527a1537db98d4c13c0110ace7247fa6580f78b484f4d89c6",
-      "archiveSize": 32393347,
-      "uncompressedSize": 82460672,
+      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.08.02/vocabulaire.zip",
+      "version": 5,
+      "sha256": "3b5b13e98a75f9ad55ee02d96fbc3c6899d8f0d9e9ea98825831418cb60a0b6c",
+      "dbSha256": "ea2913fe7f0b3788def60abac81ccd57db65bba632699e751cb78123a4b77243",
+      "archiveSize": 32394338,
+      "uncompressedSize": 82436096,
       "required": true
     },
     {
@@ -31,12 +31,12 @@
       "id": "idioms",
       "label": "Base d'expressions",
       "filename": "idioms.db",
-      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.07.29/idioms.zip",
-      "version": 15,
-      "sha256": "b6d71b99f836779a624a0a97d5a72b72477be5f9d5f1025fd003e20e69ae3b89",
-      "dbSha256": "952a3c3bb50168afe1b23689e0d1cb09683d2ce9c3fa34b1542eb9994102b361",
-      "archiveSize": 2534235,
-      "uncompressedSize": 7073792,
+      "archive": "https://github.com/ptitan/kitsune-data/releases/download/v2026.08.02/idioms.zip",
+      "version": 16,
+      "sha256": "dea61832033f0bf50fd47e6a17b6c60097c0618284dbb0ffb7db7d4acae755f7",
+      "dbSha256": "7232519cd677367bf9d7792af7aa378b58384b6e0b993b7e3de585426bc8e128",
+      "archiveSize": 4793384,
+      "uncompressedSize": 14217216,
       "required": true
     },
     {
